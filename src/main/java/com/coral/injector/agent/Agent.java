@@ -6,6 +6,9 @@ import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.util.HashMap;
 
+import com.coral.injector.agent.adders.ReflectiveGuiButton;
+import com.coral.injector.agent.adders.api.AdderRegistry;
+import com.coral.injector.agent.adders.api.LoadClassAdders;
 import com.coral.injector.agent.transformers.GuiMainMenuTransformer;
 import com.coral.injector.agent.transformers.api.LoadClassTransformers;
 import com.coral.injector.agent.transformers.api.TransformerRegistry;
@@ -18,12 +21,18 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LineNumberAttribute;
 
 public class Agent {
-    public static void agentmain(String args, Instrumentation i) {
+    public static void agentmain(String args, Instrumentation i)
+            throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException,
+            NotFoundException, CannotCompileException {
         System.out.println("Agent Main");
 
         TransformerRegistry.getInstance().register(new GuiMainMenuTransformer());
+        AdderRegistry.getInstance().register(new ReflectiveGuiButton());
 
         System.out.println(TransformerRegistry.getInstance().registry);
+
+        LoadClassAdders lca = new LoadClassAdders();
+        lca.load();
 
         LoadClassTransformers lct = new LoadClassTransformers();
         HashMap<String, CtClass> classes = null;

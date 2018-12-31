@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+import com.coral.injector.agent.globalApi.AddMethod;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -30,6 +32,8 @@ public class LoadClassTransformers {
             ClassTransformer transformer = c.getAnnotation(ClassTransformer.class);
             String mappedName = transformer.mappedName();
             CtClass cc = cp.getOrNull(mappedName);
+
+            cc.defrost();
 
             //get an instance of the transformer
             Object instance = c.newInstance();
@@ -73,6 +77,7 @@ public class LoadClassTransformers {
             }
 
             toReturn.put(mappedName, cc);
+
         }
         return toReturn;
     }

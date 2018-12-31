@@ -1,7 +1,6 @@
 package com.coral.injector.agent.transformers.api;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TransformerRegistry {
 
